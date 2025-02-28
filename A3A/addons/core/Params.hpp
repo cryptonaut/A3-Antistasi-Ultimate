@@ -600,27 +600,6 @@ class Params
     {
         type = "Experimental";
     };
-    class blackMarketIgnoreRequirements : ExperimentalParams
-    {
-        title = $STR_params_blackMarketIgnoreRequirements;
-        values[] = {0,1};
-        texts[] = {$STR_antistasi_dialogs_generic_button_no_text,$STR_antistasi_dialogs_generic_button_yes_text};
-        default = 0;
-    };
-    class A3U_blackMarketDiscountVehicle : ExperimentalParams
-    {
-        title = $STR_params_blackMarketDiscountVehicle;
-        values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        texts[] = {$STR_antistasi_dialogs_generic_button_no_text, "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%"};
-        default = 0;
-    };
-    class A3U_blackMarketDiscountWeapon : ExperimentalParams
-    {
-        title = $STR_params_blackMarketDiscountWeapon;
-        values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        texts[] = {$STR_antistasi_dialogs_generic_button_no_text, "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%"};
-        default = 0;
-    };
     class enableVehicleAutoLock: ExperimentalParams
     {
         title = $STR_params_enableVehicleAutoLock;
@@ -641,6 +620,27 @@ class Params
         values[] = {0,1};
         texts[] = {$STR_antistasi_dialogs_generic_button_no_text, $STR_antistasi_dialogs_generic_button_yes_text};
         default = 1;
+    };
+    class blackMarketIgnoreRequirements : ExperimentalParams
+    {
+        title = $STR_params_blackMarketIgnoreRequirements;
+        values[] = {0,1};
+        texts[] = {$STR_antistasi_dialogs_generic_button_no_text,$STR_antistasi_dialogs_generic_button_yes_text};
+        default = 0;
+    };
+    class A3U_blackMarketDiscountVehicle : ExperimentalParams
+    {
+        title = $STR_params_blackMarketDiscountVehicle;
+        values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        texts[] = {$STR_antistasi_dialogs_generic_button_no_text, "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%"};
+        default = 0;
+    };
+    class A3U_blackMarketDiscountWeapon : ExperimentalParams
+    {
+        title = $STR_params_blackMarketDiscountWeapon;
+        values[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        texts[] = {$STR_antistasi_dialogs_generic_button_no_text, "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%"};
+        default = 0;
     };
     class enableSpectrumDevice: ExperimentalParams
     {

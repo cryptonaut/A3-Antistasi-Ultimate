@@ -140,15 +140,6 @@
             <Original>%1 just sent a tank platoon.</Original>
         </Key>
     </Package>
-    <Package name="Arsenal">
-        <Key ID="STR_JNA_SCT_QUICK_EQUIP">
-            <Original>Quick Equip Loadout</Original>
-            <Russian>Быстрая экипировка</Russian>
-            <Korean>빠른 장비 로드아웃</Korean>
-            <Chinesesimp>快速装备</Chinesesimp>
-            <French>Équipement rapide</French>
-        </Key>
-    </Package>
     <Package name="Lockpick">
         <Key ID="STR_A3AU_action_lockpick_title">
             <Original>Lockpick</Original>
@@ -261,6 +252,15 @@
             <Czech>Musíte být inženýrem, abyste mohli začít odemykat</Czech>
             <Portuguese>Você precisa ser um engenheiro para começar a arrombar fechaduras</Portuguese>
             <Turkish>Kilit açmaya başlamak için mühendis olmalısın</Turkish>
+        </Key>
+    </Package>
+    <Package name="Arsenal">
+        <Key ID="STR_JNA_SCT_QUICK_EQUIP">
+            <Original>Quick Equip Loadout</Original>
+            <Russian>Быстрая экипировка</Russian>
+            <Korean>빠른 장비 로드아웃</Korean>
+            <Chinesesimp>快速装备</Chinesesimp>
+            <French>Équipement rapide</French>
         </Key>
     </Package>
 </Project>
