@@ -299,41 +299,83 @@ if (!_busy) then {
 		private _hangar = objNull;
 		private _spawnParameter = [_markerX, "Plane"] call A3A_fnc_findSpawnPosition;
 		if(_spawnParameter isEqualType []) then {
-			private _vehPool = (_faction get "vehiclesPlanesCAS") + (_faction get "vehiclesPlanesAA");
-			if(count _vehPool > 0) then
+			private _vehiclesPlanesCAS = _faction get "vehiclesPlanesCAS";
+			private _vehiclesPlanesAA = _faction get "vehiclesPlanesAA";
+			private _uavsAttack = _faction getOrDefault ["uavsAttack", []];
+
+			private _vehPool = [];
 			{
-				_spawnsUsed pushBack _spawnParameter#2;
-				_typeVehX = selectRandom _vehPool;
-				/* isNil { */
-					_veh = createVehicle [_typeVehX, (_spawnParameter select 0), [], 0, "CAN_COLLIDE"];
-					_veh setDir (_spawnParameter select 1);
-					sleep 0.5;
-					if !(alive _veh) then {
-						_hangar = (nearestObjects [_veh, ["Static"], 20]) select 0;
-						deleteVehicle _hangar;
-						deleteVehicle _veh;
-						_veh = createVehicle [_typeVehX, (_spawnParameter select 0), [], 0, "CAN_COLLIDE"];
-						_veh setDir (_spawnParameter select 1);
-						_veh allowDamage false;
-						_veh enableSimulation false;
-						sleep 0.5;
-						_veh enableSimulation true;
-						_veh allowDamage true;
-					};
-				/* }; */
-				_vehiclesX pushBack _veh;
-				[_veh, _sideX] call A3A_fnc_AIVEHinit;
-				
+			    _vehPool pushBack _x;
+			    _vehPool pushBack 1;
+			} forEach _vehiclesPlanesCAS;
+
+			{
+			    _vehPool pushBack _x;
+			    _vehPool pushBack 1;
+			} forEach _vehiclesPlanesAA;
+
+			{
+			    _vehPool pushBack _x;
+			    _vehPool pushBack A3A_UAVSpawnChance;
+			} forEach _uavsAttack;
+			_spawnsUsed pushBack _spawnParameter#2;
+			_typeVehX = selectRandomWeighted _vehPool;
+			_veh = createVehicle [_typeVehX, (_spawnParameter select 0), [], 0, "CAN_COLLIDE"];
+			_veh setDir (_spawnParameter select 1);
+			sleep 0.5;
+			if !(alive _veh) then {
+			    _hangar = (nearestObjects [_veh, ["Static"], 20]) select 0;
+			    deleteVehicle _hangar;
+			    deleteVehicle _veh;
+			    _veh = createVehicle [_typeVehX, (_spawnParameter select 0), [], 0, "CAN_COLLIDE"];
+			    _veh setDir (_spawnParameter select 1);
+			    _veh allowDamage false;
+			    _veh enableSimulation false;
+			    sleep 0.5;
+			    _veh enableSimulation true;
+			    _veh allowDamage true;
 			};
+			_vehiclesX pushBack _veh;
+			[_veh, _sideX] call A3A_fnc_AIVEHinit;
 		} else {
 			if !(_runwaySpawnLocation isEqualTo []) then {
-				private _airVehTypes = (_faction get "vehiclesPlanesCAS")
-                    + (_faction get "vehiclesPlanesAA")
-					+ (_faction get "vehiclesPlanesLargeCAS")
-                    + (_faction get "vehiclesPlanesLargeAA")
-                    + (_faction get "vehiclesPlanesTransport");
-		    		+ (_faction getOrDefault ["vehiclesPlanesGunship", []]);
-				_typeVehX = selectRandom _airVehTypes;
+				private _vehiclesPlanesCAS = _faction get "vehiclesPlanesCAS";
+				private _vehiclesPlanesAA = _faction get "vehiclesPlanesAA";
+				private _vehiclesPlanesLargeCAS = _faction get "vehiclesPlanesLargeCAS";
+				private _vehiclesPlanesLargeAA = _faction get "vehiclesPlanesLargeAA";
+				private _vehiclesPlanesTransport = _faction get "vehiclesPlanesTransport";
+				private _vehiclesPlanesGunship = _faction getOrDefault ["vehiclesPlanesGunship", []];
+				private _uavsAttack = _faction getOrDefault ["uavsAttack", []];
+				private _vehPool = [];
+				{
+				    _vehPool pushBack _x;
+				    _vehPool pushBack 0.7;
+				} forEach _vehiclesPlanesCAS;
+				{
+				    _vehPool pushBack _x;
+				    _vehPool pushBack 0.7;
+				} forEach _vehiclesPlanesAA;
+				{
+				    _vehPool pushBack _x;
+				    _vehPool pushBack 1;
+				} forEach _vehiclesPlanesLargeCAS;
+				{
+				    _vehPool pushBack _x;
+				    _vehPool pushBack 1;
+				} forEach _vehiclesPlanesLargeAA;
+				{
+				    _vehPool pushBack _x;
+				    _vehPool pushBack 1;
+				} forEach _vehiclesPlanesTransport;
+				{
+				    _vehPool pushBack _x;
+				    _vehPool pushBack 0.5;
+				} forEach _vehiclesPlanesGunship;
+				{
+				    _vehPool pushBack _x;
+				    _vehPool pushBack ((A3A_UAVSpawnChance - 0.1) max 0);
+				} forEach _uavsAttack;
+				_typeVehX = selectRandomWeighted _vehPool;
 				if (!isNil "_typeVehX") then {
 					_veh = createVehicle [_typeVehX, _pos, [],50, "NONE"];
 					_veh setDir (_ang);
@@ -398,18 +440,41 @@ if (!_busy) then
 	};
 };
 
-private _vehTypesLight = 
-	(_faction get "vehiclesLightArmed") + 
-	(_faction get "vehiclesLightUnarmed") + 
-	(_faction get "vehiclesTrucks") + 
-	(_faction get "vehiclesAmmoTrucks") + 
-	(_faction get "vehiclesRepairTrucks") + 
-	(_faction get "vehiclesFuelTrucks") + 
-	(_faction get "vehiclesMedical");
-_countX = 0;
+private _groundPool = [];
+
+private _vehTypes = [
+	"vehiclesLightArmed",
+	"vehiclesLightUnarmed",
+	"vehiclesTrucks",
+	"vehiclesCargoTrucks",
+	"vehiclesAmmoTrucks",
+	"vehiclesRepairTrucks",
+	"vehiclesFuelTrucks",
+	"vehiclesMedical"
+];
+
+private _vehTypeWeights = [
+	7, 
+	4, 
+	2, 
+	2,
+	1, 
+	1, 
+	1, 
+	2
+];
+
+{
+	private _vehs = _faction get _x;
+	if (_vehs isEqualTo []) then {continue};
+	private _weight = (_vehTypeWeights select _forEachIndex) / count _vehs;
+	{
+		_groundPool append [_x, _weight];
+	} forEach _vehs;
+} forEach _vehTypes;
 
 while {_countX < _nVeh && {_countX < 3}} do {
-	private _typeVehX = selectRandom _vehTypesLight;
+	private _typeVehX = selectRandomWeighted _groundPool;
 	private _spawnParameter = [_markerX, "Vehicle"] call A3A_fnc_findSpawnPosition;
 	if(_spawnParameter isEqualType []) then
 	{
