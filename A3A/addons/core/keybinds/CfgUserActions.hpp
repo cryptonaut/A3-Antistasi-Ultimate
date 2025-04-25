@@ -36,5 +36,11 @@ class CfgUserActions {
         tooltip = $STR_A3A_keyActions_commMenu_desc;
         onActivate = ACTION(commanderRebelMenu);
     };
+
+    class GVAR(aiManagementMenu) {
+        displayName = $STR_A3A_keyActions_aiMenu_title;
+        tooltip = $STR_A3A_keyActions_aiMenu_desc;
+        onActivate = ACTION(aiManagementMenu);
+    };
 };
 #undef ACTION

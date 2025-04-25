@@ -82,6 +82,16 @@ switch (_key) do {
         [] call SCRT_fnc_ui_toggleCommanderMenu;
     };
 
+    case QGVAR(aiManagementMenu): {
+        if (player getVariable ["incapacitated",false]) exitWith {};
+        if (player getVariable ["owner",player] != player) exitWith {};
+        if (player == leader group player) then {
+            createDialog "aiManagement";
+        } else {
+            [localize "STR_antistasi_dialogs_ai_management_title", localize "STR_generic_group_leader_only"] call A3A_fnc_customHint;
+        };
+    };
+    
     default {
         Error_1("Key action not registered: %1", _key)
     };
